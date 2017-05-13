@@ -9,6 +9,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "@hashrock/formula": "^2.1.2",
     "handsontable": "^0.31.2",
     "moment": "^2.18.1",
     "numbro": "^1.11.0",

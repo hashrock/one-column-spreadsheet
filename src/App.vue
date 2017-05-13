@@ -23,6 +23,8 @@
   import Handsontable from 'handsontable';
   import HotTable from 'vue-handsontable-official';
   import Vue from 'vue';
+  var formula = require("@hashrock/formula")
+
   let initialDataSet = []
   for (let i = 0; i < 256; i++) {
     initialDataSet.push([""])
@@ -60,7 +62,7 @@
     },
     computed: {
       ary: function(){
-        return this.dataAry.filter(line => line.length > 0)
+        return this.dataAry.filter(line => line.length > 0).map(row => formula.isnumber(row) ? row : formula.run(row))
       },
       total: function () {
         if(checkArray(this.ary) === NaN){
