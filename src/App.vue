@@ -1,27 +1,33 @@
 <template>
   <div id="hot-preview">
-    <h1>たしざんつーる</h1>
+    <h3>One Line Spreadsheet</h3>
     <HotTable :root="root" :settings.sync="hotSettings"></HotTable>
     <div class="total">
-      <div class="total-sum">合計： <input type="text" :value="total" /></div>
-      <div class="total-num">
-        行数： <input type="text" :value="ary.length" />
+      <div class="total-row total-sum">
+        <div class="total-row__label">合計</div>
+        <input class="sum" type="text" :value="total" /></div>
+      <div class="total-row total-average">
+        <div class="total-row__label">平均</div>
+        <input type="text" :value="average" />
       </div>
-      <div class="total-average">
-        平均： <input type="text" :value="average" />
+      <div class="total-row total-num">
+        <div class="total-row__label">行数</div>
+        <input class="num" type="text" :value="ary.length" />
       </div>
     </div>
     <div class="howto">
-      使い方<br /><br />
-      入力した行の合計が表示されます。それだけです。
-      一行しかないExcelみたいに使ってください。
+      <h4>
+        使い方
+      </h4>
+      <div>
+        入力した行の合計が表示されます。一行しかないExcelみたいに使ってください。
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import HotTable from "@handsontable/vue";
-import Vue from "vue";
 var formula = require("formula");
 
 let initialDataSet = [];
@@ -49,10 +55,11 @@ export default {
       dataAry: [],
       hotSettings: {
         data: initialDataSet,
-        width: 250,
+        width: 300,
         height: 320,
-        colWidths: 200,
+        colWidths: 270,
         rowHeights: 23,
+        className: "htRight",
         afterChange: (data) => {
           this.dataAry = this.hotSettings.data.reduce((a, b) => a.concat(b));
         },
@@ -89,12 +96,54 @@ export default {
 
 <style>
 @import "~handsontable/dist/handsontable.full.css";
+#hot-preview{
+  border-top: 4px solid #597bbcdb;
+  width: 300px;
+  margin: 0 auto;
+}
+body{
+  background-color: #eee;
+  margin: 0;
+}
+
+h3{
+  font-family: system-ui, -apple-system, /* Firefox supports this but not yet `system-ui` */ 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  font-weight: 300;
+  text-align: center;
+}
+
+input{
+  padding: 0.75rem 0.5rem;
+  text-align: right;
+  flex:1;
+  font-size: 1.2em;
+  min-width: 0;
+  border: 1px solid #ccc;
+  border-radius: 0.2em;
+}
+input.sum{
+  font-weight: 700;
+}
+input.num{
+  background: #f5f5f5;
+  border: none;
+}
+
 #test-hot {
-  width: 240px;
   overflow: hidden;
 }
+
+.total-row {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5em;
+}
+.total-row__label{
+  padding: 0.5em;
+}
+
 .total-sum {
-  color: blue;
+  color: rgb(75, 137, 255);
 }
 .total-num {
   color: #999;
@@ -102,9 +151,13 @@ export default {
 .total-average {
   color: #999;
 }
+h4{
+  margin: 0.5em 0;
+}
 .howto {
-  border: 1px solid;
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.5em;
+  margin-top: 1em;
+  background: #f6f6f6;
+  color: #666;
 }
 </style>
