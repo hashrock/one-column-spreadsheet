@@ -1,11 +1,16 @@
 <template>
   <div id="hot-preview">
     <h3>One Line Spreadsheet</h3>
-    <HotTable :root="root" :settings.sync="hotSettings"></HotTable>
+    <HotTable
+      :root="root"
+      :settings.sync="hotSettings"
+      ref="hotTableComponent"
+    ></HotTable>
     <div class="total">
       <div class="total-row total-sum">
         <div class="total-row__label">合計</div>
-        <input class="sum" type="text" :value="total" /></div>
+        <input class="sum" type="text" :value="total" />
+      </div>
       <div class="total-row total-average">
         <div class="total-row__label">平均</div>
         <input type="text" :value="average" />
@@ -16,9 +21,7 @@
       </div>
     </div>
     <div class="howto">
-      <h4>
-        使い方
-      </h4>
+      <h4>使い方</h4>
       <div>
         入力した行の合計が表示されます。一行しかないExcelみたいに使ってください。
       </div>
@@ -63,6 +66,9 @@ export default {
         afterChange: (data) => {
           this.dataAry = this.hotSettings.data.reduce((a, b) => a.concat(b));
         },
+        afterInit: () => {
+          this.afterInit();
+        },
         licenseKey: "non-commercial-and-evaluation",
       },
     };
@@ -71,7 +77,13 @@ export default {
     ary() {
       return this.dataAry
         .filter((line) => line && line.length > 0)
-        .map((row) => (formula.isnumber(row) ? row : formula.run(row)));
+        .map((row) => {
+          try {
+            return formula.isnumber(row) ? row : formula.run(row);
+          } catch (e) {
+            return 0;
+          }
+        });
     },
     total() {
       if (checkArray(this.ary) === NaN) {
@@ -87,6 +99,14 @@ export default {
       return this.total / this.ary.length;
     },
   },
+  methods: {
+    afterInit() {
+      this.$nextTick(() => {
+        const table = this.$refs.hotTableComponent.hotInstance;
+        table.selectCell(0, 0, 0, 0);
+      });
+    },
+  },
   components: {
     HotTable,
   },
@@ -96,35 +116,37 @@ export default {
 
 <style>
 @import "~handsontable/dist/handsontable.full.css";
-#hot-preview{
+#hot-preview {
   border-top: 4px solid #597bbcdb;
   width: 300px;
   margin: 0 auto;
 }
-body{
+body {
   background-color: #eee;
   margin: 0;
 }
 
-h3{
-  font-family: system-ui, -apple-system, /* Firefox supports this but not yet `system-ui` */ 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+h3 {
+  font-family: system-ui, -apple-system,
+    /* Firefox supports this but not yet `system-ui` */ "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   font-weight: 300;
   text-align: center;
 }
 
-input{
+input {
   padding: 0.75rem 0.5rem;
   text-align: right;
-  flex:1;
+  flex: 1;
   font-size: 1.2em;
   min-width: 0;
   border: 1px solid #ccc;
   border-radius: 0.2em;
 }
-input.sum{
+input.sum {
   font-weight: 700;
 }
-input.num{
+input.num {
   background: #f5f5f5;
   border: none;
 }
@@ -138,7 +160,7 @@ input.num{
   align-items: center;
   margin-top: 0.5em;
 }
-.total-row__label{
+.total-row__label {
   padding: 0.5em;
 }
 
@@ -151,7 +173,7 @@ input.num{
 .total-average {
   color: #999;
 }
-h4{
+h4 {
   margin: 0.5em 0;
 }
 .howto {
