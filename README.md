@@ -1,18 +1,3 @@
-# study-test-page
+# One Column SpreadSheet
 
-> A Vue.js project
-
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+![calc-001](https://user-images.githubusercontent.com/3132889/114555452-ab72e200-9ca2-11eb-8c78-0dd8b86634eb.gif)
