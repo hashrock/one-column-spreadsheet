@@ -11,6 +11,6 @@
     "poi": "^12.4.2",
     "vue": "^2.6.12",
     "vue-template-compiler": "^2.6.12",
-    "handsontable": "^8.3.2"
+    "handsontable": "^10.0.0"
   }
 }
